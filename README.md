@@ -7,6 +7,12 @@
       alt="GitHub Repo"
     />
   </a>
+  <a href="https://pzs19.github.io/ContextPilot/">
+    <img
+      src="https://img.shields.io/badge/ContextPilot-Live_Demo-ff725e?logo=githubpages&logoColor=white"
+      alt="ContextPilot Live Demo"
+    />
+  </a>
   <a href="">
     <img
       src="https://img.shields.io/badge/ContextPilot-Paper-red?logo=arxiv&logoColor=red"
