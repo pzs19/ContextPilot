@@ -1,13 +1,13 @@
 # ContextPilot
 
 <p align="center">
-  <a href="https://github.com/pzs19/ContextPilot">
+  <a href="https://github.com/Tencent/ContextPilot">
     <img
       src="https://img.shields.io/badge/ContextPilot-GitHub-blue?logo=github"
       alt="GitHub Repo"
     />
   </a>
-  <a href="https://pzs19.github.io/ContextPilot/">
+  <a href="https://tencent.github.io/ContextPilot/">
     <img
       src="https://img.shields.io/badge/ContextPilot-Live_Demo-ff725e?logo=githubpages&logoColor=white"
       alt="ContextPilot Live Demo"
@@ -25,7 +25,7 @@
       alt="Hugging Face Models"
     />
   </a>
-  <a href="https://github.com/pzs19/ContextPilot/tree/main#setup">
+  <a href="https://github.com/Tencent/ContextPilot/tree/main#setup">
     <img
       src="https://img.shields.io/badge/ContextPilot-Quickstart-purple?logo=rocket&logoColor=purple"
       alt="Quickstart"
