@@ -121,7 +121,8 @@ bash sh/run_qwen3-8b_longbenchv2.sh
 | Maximum assistant turns | 100 |
 | Model context length | 40,960 tokens |
 | Maximum generation per assistant turn | 2,048 tokens |
-| Rollout termination threshold | 38,400 input tokens |
+| Proactive context cleanup threshold | 24,000 input tokens |
+| Rollout penalty/termination threshold | 26,000 input tokens |
 | Sampling temperature / top-p / top-k | 0.7 / 0.8 / 20 |
 | vLLM topology | TP=1, DP=8 |
 

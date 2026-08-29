@@ -43,19 +43,15 @@ def _output(*, snapshot: bool, terminal: bool = False, node_id: str | None = Non
     )
 
 
-def test_uncertainty_uses_topk_entropy_and_keeps_logprob_fallback():
+def test_uncertainty_matches_arpo_topk_entropy_sum_without_logprob_fallback():
     loop = StatelmToolAgentLoop.__new__(StatelmToolAgentLoop)
     loop.contextpilot_entropy_token_window = 2
-    loop.contextpilot_entropy_nll_weight = 0.25
 
-    entropy_value = loop._contextpilot_sequence_uncertainty([0.1, 0.3, 0.9], [-9.0, -9.0])
-    changed_logprob_value = loop._contextpilot_sequence_uncertainty([0.1, 0.3, 0.9], [-1.0, -1.0])
-    fallback_value = loop._contextpilot_sequence_uncertainty(None, [-1.0, -3.0, -8.0])
+    entropy_value = loop._contextpilot_sequence_uncertainty([0.1, 0.3, 0.9])
+    missing_entropy_value = loop._contextpilot_sequence_uncertainty(None)
 
-    assert entropy_value == pytest.approx(0.75 * 0.2 + 0.25 * 9.0)
-    assert changed_logprob_value != entropy_value
-    assert fallback_value == pytest.approx(2.0)
-    assert fallback_value != 0.0
+    assert entropy_value == pytest.approx(0.4)
+    assert missing_entropy_value == 0.0
 
 
 def test_parent_checkpoint_resamples_selected_action_without_training_prefix_twice():
@@ -722,7 +718,7 @@ def test_reward_only_terminal_propagates_credit_but_is_not_a_training_sample():
 
 
 @pytest.mark.asyncio
-async def test_reward_only_terminal_empty_response_is_materialized_as_padding():
+async def test_turn_limit_terminal_is_materialized_as_padding_and_receives_r_pen():
     worker_class = AgentLoopWorker.__ray_metadata__.modified_class
     worker = worker_class.__new__(worker_class)
     worker.config = SimpleNamespace(
@@ -730,7 +726,7 @@ async def test_reward_only_terminal_empty_response_is_materialized_as_padding():
             rollout=SimpleNamespace(prompt_length=16, response_length=8),
         ),
     )
-    worker._cp_enable_rpen_flag = False
+    worker._cp_enable_rpen_flag = True
 
     class FakeTokenizer:
         padding_side = "left"
@@ -766,18 +762,21 @@ async def test_reward_only_terminal_empty_response_is_materialized_as_padding():
         response_ids=[],
         response_mask=[],
         response_logprobs=[],
-        num_turns=50,
+        num_turns=100,
         metrics=AgentLoopMetrics(),
         extra_fields={
             "contextpilot_terminal": True,
             "contextpilot_reward_only_terminal": True,
             "contextpilot_drop_from_training": True,
+            "context_len_or_turn_exceeded": True,
         },
     )
 
     result = await worker._compute_agent_output_reward(terminal, {}, "request")
 
-    assert result["reward_score"] == 0.0
+    assert result["reward_score"] == -0.5
+    assert result["reward_extra_info"]["contextpilot_r_pen"] == -0.5
+    assert result["reward_extra_info"]["contextpilot_exceeded_budget"] is True
 
 
 @pytest.mark.asyncio
@@ -839,7 +838,7 @@ async def test_generation_starts_new_12k_segment_before_truncating_a_full_turn()
     loop = StatelmToolAgentLoop.__new__(StatelmToolAgentLoop)
     loop.contextpilot_partial_rollout_enable = False
     loop.contextpilot_enable = True
-    loop.contextpilot_budget_token_limit = 38400
+    loop.contextpilot_budget_token_limit = 26000
     loop.prompt_length = 28672
     loop.response_length = 12288
     loop.max_response_length = 2048
@@ -991,11 +990,11 @@ def test_dynamic_segment_preserves_37k_history_and_masks_only_new_tokens():
 
 
 @pytest.mark.asyncio
-async def test_38k_history_still_allows_one_full_2k_generation():
+async def test_25k_history_still_allows_one_full_2k_generation():
     loop = StatelmToolAgentLoop.__new__(StatelmToolAgentLoop)
     loop.contextpilot_partial_rollout_enable = False
     loop.contextpilot_enable = True
-    loop.contextpilot_budget_token_limit = 38400
+    loop.contextpilot_budget_token_limit = 26000
     loop.prompt_length = 28672
     loop.response_length = 12288
     loop.max_response_length = 2048
@@ -1021,15 +1020,15 @@ async def test_38k_history_still_allows_one_full_2k_generation():
     loop.server_manager = FakeServer()
     loop.tool_parser = FakeParser()
     data = AgentData(messages=[], image_data=None, metrics={}, request_id="r", tools_kwargs={})
-    data.prompt_ids = [1] * 38000
+    data.prompt_ids = [1] * 25000
     assert loop._start_training_segment(data) is True
 
     state = await loop._handle_generating_state(data, {"temperature": 0.7})
 
     assert state is AgentState.TERMINATED
-    assert len(captured["prompt_ids"]) == 38000
+    assert len(captured["prompt_ids"]) == 25000
     assert captured["sampling_params"]["max_tokens"] == 2048
-    assert len(data.response_mask) == (38000 - 28672) + 32
+    assert len(data.response_mask) == 32
     assert sum(data.response_mask) == 32
 
 

@@ -205,7 +205,7 @@ class AgentLoopOutput(BaseModel):
 
 
 class MultiTrajectoryAgentLoopOutput(BaseModel):
-    """Agent loop output containing multiple trajectories (for StateLM with snapshots)."""
+    """Agent loop output containing ContextPilot snapshot trajectories."""
 
     trajectories: list[AgentLoopOutput]
     """List of trajectories, including snapshots and final trajectory."""
@@ -507,7 +507,10 @@ class AgentLoopWorker:
             self._cp_entropy_top_k = 10
             self._cp_max_concurrent_branches = 64
         if self._cp_enable_rpen_flag:
-            logger.info("[AgentLoopWorker] ContextPilot R_pen ENABLED (-0.5 on tool failure).")
+            logger.info(
+                "[AgentLoopWorker] ContextPilot R_pen ENABLED "
+                "(-0.5 on tool failure or context/turn-limit violation)."
+            )
         if self._cp_partial_rollout_enable:
             logger.info(
                 "[AgentLoopWorker] ContextPilot query-global partial rollout enabled: "

@@ -1,5 +1,5 @@
 """
-Reward function for QA problems for StateLM Training.
+Reward function for ContextPilot QA training.
 
 Terminal reward components implemented here:
 - outcome reward R_out in {0, 1}
@@ -10,12 +10,15 @@ agent-loop layer because it depends on trajectory-level tool execution and
 context-budget signals.
 """
 
-import re
 import json
+import logging
 import os
-import random
+import re
+
 from openai import OpenAI
 from verl.utils.reward_score.math_reward import last_boxed_only_string, remove_boxed
+
+logger = logging.getLogger(__name__)
 
 LLM_JUDGE_PROMPT_TEMPLATE = """
 Given a problem, its correct answer, and a student's answer below, your task is to review the student's answer and determine if it is correct by comparing it to the correct answer. If the student's answer is incomplete or ambiguous, assume it is incorrect.
@@ -134,7 +137,7 @@ def llm_judge_answer(prediction: str, ground_truth: str, question: str = None) -
             
             if attempt < MAX_RETRIES - 1:
                 delay = BASE_DELAY * (2 ** attempt)
-                print(f"LLM Judge: No boxed result found, retrying in {delay} seconds...")
+                logger.warning("LLM judge returned no boxed result; retrying in %d seconds", delay)
                 time.sleep(delay)
             else:
                 raise ValueError(f"No boxed result found after {MAX_RETRIES} attempts: {response.choices[0].message.content}")
@@ -142,16 +145,16 @@ def llm_judge_answer(prediction: str, ground_truth: str, question: str = None) -
         except (RateLimitError, APIConnectionError) as e:
             if attempt < MAX_RETRIES - 1:
                 delay = BASE_DELAY * (2 ** attempt)
-                print(f"LLM Judge API error: {e}, retrying in {delay} seconds...")
+                logger.warning("LLM judge API error; retrying in %d seconds: %s", delay, e)
                 time.sleep(delay)
             else:
-                print(f"LLM Judge failed after {MAX_RETRIES} attempts: {e}")
+                logger.warning("LLM judge failed after %d attempts: %s", MAX_RETRIES, e)
                 pred_normalized = prediction.lower().strip()
                 gt_normalized = ground_truth.lower().strip()
                 return pred_normalized == gt_normalized
                 
         except Exception as e:
-            print(f"LLM Judge error: {e}")
+            logger.warning("LLM judge error: %s", e)
             pred_normalized = prediction.lower().strip()
             gt_normalized = ground_truth.lower().strip()
             return pred_normalized == gt_normalized
@@ -189,7 +192,7 @@ def compute_score(solution_str: str, ground_truth: str, **kwargs) -> float:
             break
     else:
         question = ""
-        print(f"[Statelm QA Reward] No user prompt found, using empty question.")
+        logger.warning("No user prompt found; using an empty question for QA scoring")
     
     is_mcq_question = is_mcq(ground_truth)
     
@@ -205,10 +208,4 @@ def compute_score(solution_str: str, ground_truth: str, **kwargs) -> float:
     r_fmt = -0.5 if had_format_violation else 0.0
     score = r_out + r_fmt
 
-    if random.random() < 0.2:
-        print(f"[Statelm QA Reward] Question: {question}")
-        print(f"[Statelm QA Reward] Correct Answer: {ground_truth}")
-        print(f"[Statelm QA Reward] Extracted Answer: {predicted}")
-        print(f"[Statelm QA Reward] Score: {score}")
-        
     return score

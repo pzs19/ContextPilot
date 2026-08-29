@@ -2,7 +2,6 @@ import asyncio
 import copy
 import json
 import logging
-import math
 import os
 from datetime import datetime
 from enum import Enum
@@ -25,18 +24,8 @@ from verl.tools.utils.tool_registry import initialize_tools_from_config
 from verl.utils.profiler import simple_timer
 from verl.utils.rollout_trace import rollout_trace_op
 
-import numpy as np
-
-logger = logging.getLogger(__file__)
+logger = logging.getLogger(__name__)
 logger.setLevel(os.getenv("VERL_LOGGING_LEVEL", "INFO"))
-
-if not logger.handlers:
-    _handler = logging.StreamHandler()
-    _handler.setLevel(logging.INFO)
-    _handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-    _handler.flush = lambda: None  # Enable immediate flushing
-    logger.addHandler(_handler)
-    logger.propagate = False
 
 
 @lru_cache(maxsize=4)
@@ -145,7 +134,7 @@ def render_context(
     truncated_msg_ids: Optional[dict[int, str]] = None,
 ) -> list[dict[str, Any]]:
     """
-    Build a rendered view of the message history by taking into account editions invoked by StateLM.
+    Build a rendered message-history view after applying context-editing operations.
     We also need to set the response_mask and response_logprobs to empty lists for the current turn.
     """
     conv_history_cp = copy.deepcopy(conv_history)
@@ -468,7 +457,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
         if cls._class_initialized:
             return
         cls._class_initialized = True
-        print("Performing class-level StatelmToolAgentLoop initialization")
+        logger.info("Initializing StatelmToolAgentLoop")
 
         _mt_cfg = config.actor_rollout_ref.rollout.multi_turn
         _cp_cfg = _mt_cfg.get("contextpilot", {}) if hasattr(_mt_cfg, "get") else {}
@@ -481,17 +470,17 @@ class StatelmToolAgentLoop(AgentLoopBase):
         cls._cp_ce_tools = cls._cp_offloading_tools | cls._cp_memory_writing_tools
         cls._cp_retrieval_snapshot_tools = {"readChunk", "readMultiChunks"}
         try:
-            cls.contextpilot_budget_token_limit = int(_cp_cfg.get("budget_token_limit", 38400) or 38400)
+            cls.contextpilot_budget_token_limit = int(_cp_cfg.get("budget_token_limit", 26000) or 26000)
         except Exception:
-            cls.contextpilot_budget_token_limit = 38400
+            cls.contextpilot_budget_token_limit = 26000
         try:
             cls.contextpilot_auto_delete_token_limit = int(
-                _cp_cfg.get("auto_delete_token_limit", 28000) or 0
+                _cp_cfg.get("auto_delete_token_limit", 24000) or 0
             )
         except Exception:
-            cls.contextpilot_auto_delete_token_limit = 28000
+            cls.contextpilot_auto_delete_token_limit = 24000
         if cls.contextpilot_enable:
-            print(
+            logger.info(
                 "[ContextPilot] enabled. Snapshot boundaries: "
                 f"offloading={sorted(cls._cp_offloading_tools)} | "
                 f"memory_writing={sorted(cls._cp_memory_writing_tools)} | "
@@ -516,18 +505,13 @@ class StatelmToolAgentLoop(AgentLoopBase):
             cls.contextpilot_entropy_token_window = int(_partial_cfg.get("entropy_token_window", 20) or 20)
         except Exception:
             cls.contextpilot_entropy_token_window = 20
-        try:
-            cls.contextpilot_entropy_nll_weight = float(_partial_cfg.get("entropy_nll_weight", 0.25))
-        except Exception:
-            cls.contextpilot_entropy_nll_weight = 0.25
-        cls.contextpilot_entropy_nll_weight = min(1.0, max(0.0, cls.contextpilot_entropy_nll_weight))
         if cls.contextpilot_partial_rollout_enable:
-            print(
+            logger.info(
                 "[ContextPilot] partial rollout enabled: "
                 f"context_weight={cls.contextpilot_context_weight}, "
                 f"entropy_weight={cls.contextpilot_entropy_weight}, "
                 f"entropy_token_window={cls.contextpilot_entropy_token_window}, "
-                f"entropy_nll_weight={cls.contextpilot_entropy_nll_weight}"
+                "entropy_aggregation=topk_sum"
             )
 
         cls.tokenizer = tokenizer
@@ -542,7 +526,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
         cls.tools = {tool.name: tool for tool in tool_list}
         cls.tool_schemas = [tool.tool_schema.model_dump(exclude_unset=True, exclude_none=True) for tool in tool_list]
         cls.tool_parser = ToolParser.get_tool_parser(config.actor_rollout_ref.rollout.multi_turn.format, cls.tokenizer)
-        print(f"Initialized tools: {cls.tools}")
+        logger.info("Initialized %d tools: %s", len(cls.tools), sorted(cls.tools))
 
         cls.apply_chat_template_kwargs = config.data.get("apply_chat_template_kwargs", {})
         cls.prompt_length = config.actor_rollout_ref.rollout.prompt_length
@@ -557,7 +541,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
         cls.max_model_length = config.actor_rollout_ref.rollout.get("max_model_len", 8192)
         cls.max_response_length = config.actor_rollout_ref.rollout.multi_turn.get("single_turn_max_tokens", 2048)
         cls.exceed_length_penalty = config.actor_rollout_ref.rollout.multi_turn.get("exceed_length_penalty", -1.0)
-        cls.model_type = config.actor_rollout_ref.rollout.multi_turn.get("model_type") # Be aware of the thinking tag problem <think> ... </think> 
+        cls.model_type = config.actor_rollout_ref.rollout.multi_turn.get("model_type")
 
         cls.dump_trajectories_enabled = config.actor_rollout_ref.rollout.multi_turn.get("dump_trajectories_enabled", False)
         cls.dump_trajectories_dir = config.actor_rollout_ref.rollout.multi_turn.get("dump_trajectories_dir", "trajectories")
@@ -565,9 +549,9 @@ class StatelmToolAgentLoop(AgentLoopBase):
         cls._trajectory_dump_counter = 0
         if cls.dump_trajectories_enabled:
             os.makedirs(cls.dump_trajectories_dir, exist_ok=True)
-            print(f"Trajectory dumping enabled. Saving to: {cls.dump_trajectories_dir}")
+            logger.info("Trajectory dumping enabled: %s", cls.dump_trajectories_dir)
         
-        logger.info(f"[StatelmToolAgentLoop] ======== Initialized StateLM Agent Loop ======== ")
+        logger.info("[ContextPilot] Agent loop initialized")
 
     def _dump_trajectory(
         self,
@@ -666,17 +650,16 @@ class StatelmToolAgentLoop(AgentLoopBase):
             with open(filepath, "w", encoding="utf-8") as f:
                 json.dump(trajectory_data, f, indent=2, ensure_ascii=False, default=str)
             
-            logger.info(f"[StatelmToolAgentLoop] Dumped trajectory to: {filepath}")
+            logger.info("[ContextPilot] Trajectory written to %s", filepath)
         except Exception as e:
-            logger.warning(f"[StatelmToolAgentLoop] Failed to dump trajectory: {e}")
+            logger.warning("[ContextPilot] Failed to write trajectory: %s", e)
 
     def _contextpilot_sequence_uncertainty(
         self,
         token_entropies: Optional[list[float]],
-        logprobs: Optional[list[float]] = None,
     ) -> float:
+        """Return ARPO-style summed top-k entropy over the initial token window."""
         window = max(1, int(getattr(self, "contextpilot_entropy_token_window", 20)))
-        topk_entropy = None
         if token_entropies:
             vals = []
             for val in token_entropies[:window]:
@@ -685,34 +668,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
                 except Exception:
                     continue
             if vals:
-                topk_entropy = float(np.mean(vals))
-
-        sampled_nll = None
-        if logprobs:
-            vals = []
-            for val in logprobs[:window]:
-                try:
-                    vals.append(float(val))
-                except Exception:
-                    continue
-            if vals:
-                sampled_nll = float(-np.mean(vals))
-                tokenizer = getattr(self, "tokenizer", None)
-                try:
-                    vocab_size = len(tokenizer)
-                except Exception:
-                    vocab_size = 0
-                if vocab_size > 1:
-                    sampled_nll /= math.log(vocab_size)
-
-        if topk_entropy is not None and sampled_nll is not None:
-            nll_weight = float(getattr(self, "contextpilot_entropy_nll_weight", 0.25))
-            nll_weight = min(1.0, max(0.0, nll_weight))
-            return (1.0 - nll_weight) * topk_entropy + nll_weight * sampled_nll
-        if topk_entropy is not None:
-            return topk_entropy
-        if sampled_nll is not None:
-            return sampled_nll
+                return float(sum(vals))
         return 0.0
 
     @staticmethod
@@ -1281,7 +1237,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
         if not any(agent_data.response_mask):
             if len(trajectories) > 0:
                 logger.info(
-                    "[StatelmToolAgentLoop] Final response segment is empty; "
+                    "[ContextPilot] Final response segment is empty; "
                     "adding a reward-only terminal for snapshot credit propagation."
                 )
                 trajectories.append(
@@ -1292,7 +1248,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
                 )
                 return trajectories
             logger.warning(
-                "[StatelmToolAgentLoop][WARNING] Return empty MultiTrajectoryAgentLoopOutput because no valid trajectories exist."
+                "[ContextPilot] No valid trajectories were produced; returning an empty output."
             )
             return []
 
@@ -1387,11 +1343,11 @@ class StatelmToolAgentLoop(AgentLoopBase):
 
     @rollout_trace_op
     async def run(self, sampling_params: dict[str, Any], **kwargs) -> MultiTrajectoryAgentLoopOutput:
-        logger.info(f"[StatelmToolAgentLoop] Starting run()")
+        logger.debug("[ContextPilot] Starting agent loop")
         messages = with_contextpilot_system_prompt(kwargs["raw_prompt"])
         image_data = copy.deepcopy(kwargs.get("multi_modal_data", {}).get("image", None))
         document_content = kwargs.get("document_content", "")
-        logger.info(f"[StatelmToolAgentLoop] document_content length: {len(document_content) if document_content else 0}")
+        logger.debug("Document content length: %d", len(document_content) if document_content else 0)
         
         metrics = {}
         request_id = uuid4().hex
@@ -1400,7 +1356,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
         agent_data = AgentData(
             messages=messages,
             image_data=image_data,
-            document_content=document_content,  # NEW
+            document_content=document_content,
             metrics=metrics,
             request_id=request_id,
             tools_kwargs=tools_kwargs,
@@ -1421,7 +1377,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
             from verl.tools.statelm_tools import DocStateManager
             agent_data.doc_state_manager = DocStateManager(self.tokenizer, document_content)
         else:
-            logger.warning(f"[StatelmToolAgentLoop] document_content is not provided, using empty document content")
+            logger.warning("[ContextPilot] No document content was provided; using an empty document")
             agent_data.doc_state_manager = DocStateManager(self.tokenizer, " ")
 
         try:
@@ -1490,7 +1446,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
             AgentLoopOutput for this trajectory, None if the trajectory is not valid
         """
         assert len(prompt_ids) <= self.max_model_length, (
-            f"[StatelmToolAgentLoop][BUG] prompt_ids length {len(prompt_ids)} exceeds max_model_length {self.max_model_length}. This should not happen, check the safety mechanism."
+            f"prompt_ids length {len(prompt_ids)} exceeds max_model_length {self.max_model_length}."
         )
         assert len(response_mask) <= len(prompt_ids), (
             f"response_mask length {len(response_mask)} exceeds full sequence length {len(prompt_ids)}."
@@ -1593,7 +1549,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
             if agent_data.context_len_or_turn_exceeded:
                 return AgentState.TERMINATED
 
-        budget_limit = int(getattr(self, "contextpilot_budget_token_limit", 38400))
+        budget_limit = int(getattr(self, "contextpilot_budget_token_limit", 26000))
         if getattr(self, "contextpilot_enable", False) and len(agent_data.prompt_ids) > budget_limit:
             logger.warning(
                 f"[ContextPilot] input length {len(agent_data.prompt_ids)} exceeds budget_token_limit "
@@ -1665,10 +1621,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
         elif agent_data.response_logprobs:
             agent_data.response_logprobs += [0.0] * len(agent_data.response_ids)
 
-        current_uncertainty = self._contextpilot_sequence_uncertainty(
-            output.token_entropies,
-            output.log_probs,
-        )
+        current_uncertainty = self._contextpilot_sequence_uncertainty(output.token_entropies)
         if getattr(self, "contextpilot_partial_rollout_enable", False):
             if agent_data.contextpilot_initial_uncertainty is None:
                 agent_data.contextpilot_initial_uncertainty = current_uncertainty
@@ -1717,7 +1670,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
             })
         agent_data.full_history.append({
             "role": "assistant",
-            "content": [{"text": text_response}],  # Content should be a list with text block
+            "content": [{"text": text_response}],
             "tool_calls": tool_calls_formatted,
             "msg_id": current_msg_id,
         })
@@ -1727,7 +1680,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
             return AgentState.PROCESSING_TOOLS
         else:
             agent_data.had_format_violation = True
-            logger.info(f"[StatelmToolAgentLoop] No tool calls, terminating the agent.")
+            logger.info("[ContextPilot] No tool call was emitted; terminating the trajectory")
             return AgentState.TERMINATED
 
     async def _handle_processing_tools_state(self, agent_data: AgentData) -> AgentState:
@@ -1749,7 +1702,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
         editor_tool_call = False
         snapshot_only_tool_call = False
         retrieval_snapshot_tool_call = False
-        delete_msg_ids = []  # Collect message IDs to delete
+        delete_msg_ids = []
         tool_result_list = []
         assistant_msg_id = agent_data.msg_id_counter - 1
         boundary_tool_names: list[str] = []
@@ -1837,8 +1790,8 @@ class StatelmToolAgentLoop(AgentLoopBase):
 
             def _create_snapshot():
                 return {
-                    "prompt_ids": copy.deepcopy(agent_data.prompt_ids), # up to the last assistant message, no tool response tokens
-                    "response_ids": copy.deepcopy(agent_data.response_ids), # assistant response tokens generated by the model at this turn
+                    "prompt_ids": copy.deepcopy(agent_data.prompt_ids),
+                    "response_ids": copy.deepcopy(agent_data.response_ids),
                     "response_mask": copy.deepcopy(agent_data.response_mask),
                     "response_logprobs": copy.deepcopy(agent_data.response_logprobs),
                     "num_turns": agent_data.assistant_turns,
@@ -1882,7 +1835,7 @@ class StatelmToolAgentLoop(AgentLoopBase):
                 f"[PROCESSING_TOOLS] assistant_turns (={agent_data.assistant_turns}) exceeds(>=) max_assistant_turns (={self.max_assistant_turns}), terminating without appending the tool result."
             )
             agent_data.context_len_or_turn_exceeded = True
-            return AgentState.TERMINATED # last turn, no need to strip the thinking tag, never append the tool result
+            return AgentState.TERMINATED
 
         for tool_result in tool_result_list:
             agent_data.full_history.append(tool_result)

@@ -1,0 +1,307 @@
+\relax 
+\bibstyle{acl_natbib}
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{zhang2024infty,du2025simvbg}
+\citation{bc_en,team2025tongyi}
+\citation{feng2025retool}
+\citation{yao2023react}
+\citation{shao2025foldact,wu2025resum,lu2025scaling,su2026u}
+\citation{liu2026pensieve}
+\citation{li2025sculptor,ye2025agentfold,liu2026pensieve}
+\citation{chhikara2025mem0,xu2026mem}
+\citation{lu2026structured}
+\citation{yao2023react,liu2026plan}
+\citation{yu2026agentic,liu2026pensieve}
+\citation{shao2025foldact}
+\citation{dong2025agentic}
+\citation{li2026salt}
+\@LN@col{1}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\@LN@col{2}
+\citation{lu2023memochat,pan2025secom,wu2025resum,su2026u}
+\citation{lu2025scaling,shao2025foldact}
+\citation{packer2023memgpt}
+\citation{yu2026agentic}
+\citation{xu2026mem}
+\citation{li2025sculptor}
+\citation{liu2026pensieve}
+\citation{zhang2025memory}
+\citation{ye2025agentfold}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  Overview of \textbf  {\textit  {ContextPilot}}{}: (a) Extending the context management tools to support planning, long-term memory, and soft context offloading; (b) Improved RL training algorithm with context-aware partial rollout and (c) fine-grained snapshot-level credit assignment. }}{2}{figure.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:main_figure}{{1}{2}{Overview of \sysname {}: (a) Extending the context management tools to support planning, long-term memory, and soft context offloading; (b) Improved RL training algorithm with context-aware partial rollout and (c) fine-grained snapshot-level credit assignment}{figure.caption.1}{}}
+\@LN@col{1}
+\@LN@col{2}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Passive Context Management}{2}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Agentic Proactive Context Management}{2}{subsection.2.2}\protected@file@percent }
+\citation{yao2023react}
+\citation{li2025sculptor,liu2026pensieve}
+\citation{wangnovelqa}
+\citation{wangnovelqa}
+\citation{liu2026pensieve}
+\citation{chen2025browsecomp}
+\citation{liu2026pensieve}
+\citation{chen2025browsecomp}
+\citation{liu2026pensieve}
+\@LN@col{1}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Preliminary}{3}{section.3}\protected@file@percent }
+\newlabel{sec:preliminary}{{3}{3}{Preliminary}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}From Passive to Proactive: Context Management in Agentic Reasoning}{3}{subsection.3.1}\protected@file@percent }
+\newlabel{subsec:proactive_context}{{3.1}{3}{From Passive to Proactive: Context Management in Agentic Reasoning}{subsection.3.1}{}}
+\@LN@col{2}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Pilot Study}{3}{subsection.3.2}\protected@file@percent }
+\newlabel{subsec:pilot_experiment}{{3.2}{3}{Pilot Study}{subsection.3.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Methodology}{3}{section.4}\protected@file@percent }
+\newlabel{sec:methodology}{{4}{3}{Methodology}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Context Management Toolset Design}{3}{subsection.4.1}\protected@file@percent }
+\newlabel{subsec:tool_design}{{4.1}{3}{Context Management Toolset Design}{subsection.4.1}{}}
+\citation{pan2024llmlingua}
+\citation{dong2025agentic}
+\@LN@col{1}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  Impact of different tools on final outcomes: for each tool, we branch from it, sample $10$ continuation rollouts, and report the standard deviation of their task success rates. Results are evaluated with Qwen3-8B on NovelQA~\citep  {wangnovelqa}. }}{4}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:pilot_study}{{2}{4}{Impact of different tools on final outcomes: for each tool, we branch from it, sample $10$ continuation rollouts, and report the standard deviation of their task success rates. Results are evaluated with Qwen3-8B on NovelQA~\cite {wangnovelqa}}{figure.caption.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  Case study on the mismatch between task correctness and context management quality. Cases are sampled from the traces of StateLM-8B~\citep  {liu2026pensieve} on BrowseComp+~\citep  {chen2025browsecomp}. Questions are condensed to save space. }}{4}{figure.caption.3}\protected@file@percent }
+\newlabel{fig:credit_assignment_case}{{3}{4}{Case study on the mismatch between task correctness and context management quality. Cases are sampled from the traces of StateLM-8B~\cite {liu2026pensieve} on BrowseComp+~\cite {chen2025browsecomp}. Questions are condensed to save space}{figure.caption.3}{}}
+\@LN@col{2}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Context management tools of \textbf  {\textit  {ContextPilot}}{}. Tools highlighted in \textcolor {deeppurple}{purple} are newly introduced.}}{4}{table.caption.4}\protected@file@percent }
+\newlabel{tab:tools}{{1}{4}{Context management tools of \sysname {}. Tools highlighted in \textcolor {deeppurple}{purple} are newly introduced}{table.caption.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Supervised Fine-Tuning Data Synthesis}{4}{subsection.4.2}\protected@file@percent }
+\newlabel{subsec:sft}{{4.2}{4}{Supervised Fine-Tuning Data Synthesis}{subsection.4.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}RL Training with Partial Rollout and Fine-Grained Credit Assignment}{4}{subsection.4.3}\protected@file@percent }
+\newlabel{subsec:rl}{{4.3}{4}{RL Training with Partial Rollout and Fine-Grained Credit Assignment}{subsection.4.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{Context-Aware Partial Rollout.}{4}{section*.5}\protected@file@percent }
+\citation{li2025sculptor,liu2026pensieve}
+\@LN@col{1}
+\newlabel{eq:sensitivity_score}{{6}{5}{Context-Aware Partial Rollout}{equation.4.6}{}}
+\@writefile{toc}{\contentsline {paragraph}{Fine-Grained Credit Assignment.}{5}{section*.6}\protected@file@percent }
+\@LN@col{2}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces RL Training with Context-Aware Partial Rollout and Fine-Grained Credit Assignment}}{5}{algorithm.1}\protected@file@percent }
+\newlabel{alg:contextpilot_rl}{{1}{5}{RL Training with Context-Aware Partial Rollout and Fine-Grained Credit Assignment}{algorithm.1}{}}
+\newlabel{eq:snapshot_reward}{{8}{5}{Fine-Grained Credit Assignment}{equation.4.8}{}}
+\citation{shao2024deepseekmath}
+\citation{liu2026pensieve}
+\citation{liu2026pensieve}
+\citation{liu2026pensieve}
+\citation{wangnovelqa}
+\citation{kovcisky2018narrativeqa}
+\citation{bai2025longbench}
+\citation{yang2025qwen3}
+\citation{gemma4}
+\citation{li2025websailor}
+\citation{liu2025webexplorer}
+\citation{du2026openseeker}
+\citation{sheng2025hybridflow}
+\citation{wangnovelqa}
+\citation{zhang2024infty}
+\citation{wu2025longmemeval}
+\citation{chen2025browsecomp}
+\citation{mialon2024gaia}
+\citation{bc_en}
+\citation{bc_zh}
+\citation{xbench}
+\citation{openai2025gptoss120bgptoss20bmodel}
+\citation{lee2024human}
+\citation{yu2025memagent}
+\citation{liu2026pensieve}
+\citation{wu2025resum}
+\citation{lu2025scaling}
+\@LN@col{1}
+\newlabel{eq:snapshot_advantage}{{9}{6}{Fine-Grained Credit Assignment}{equation.4.9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Experiments}{6}{section.5}\protected@file@percent }
+\newlabel{sec:exp}{{5}{6}{Experiments}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Experiment Setup}{6}{subsection.5.1}\protected@file@percent }
+\newlabel{subsec:exp_setup}{{5.1}{6}{Experiment Setup}{subsection.5.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{Base Models and Training Data.}{6}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Implementation Details.}{6}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Evaluation Benchmarks and Metrics.}{6}{section*.11}\protected@file@percent }
+\@LN@col{2}
+\@writefile{toc}{\contentsline {paragraph}{Baselines.}{6}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Main Results}{6}{subsection.5.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Performance comparison of \textbf  {\textit  {ContextPilot}}{} against baselines on long-context QA tasks. For \textbf  {\textit  {ContextPilot}}{}, we run three times and report the mean and standard deviation. Results with \textsuperscript  {$\dagger $} are from~\citet {liu2026pensieve}.}}{7}{table.caption.7}\protected@file@percent }
+\newlabel{tab:longdoc_qa_results}{{2}{7}{Performance comparison of \sysname {} against baselines on long-context QA tasks. For \sysname {}, we run three times and report the mean and standard deviation. Results with \textsuperscript {$\dagger $} are from~\protect \citet {liu2026pensieve}}{table.caption.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Performance comparison of \textbf  {\textit  {ContextPilot}}{} against baseline methods on deep search tasks. We run each method three times and report the mean and standard deviation.}}{7}{table.caption.10}\protected@file@percent }
+\newlabel{tab:deep_research_results}{{3}{7}{Performance comparison of \sysname {} against baseline methods on deep search tasks. We run each method three times and report the mean and standard deviation}{table.caption.10}{}}
+\@LN@col{1}
+\@LN@col{2}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Further Analysis}{7}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Token efficiency analysis.}{7}{section*.14}\protected@file@percent }
+\@LN@col{1}
+\newlabel{fig:token_count_browsecomp}{{4a}{8}{BrowseComp}{figure.caption.13}{}}
+\newlabel{sub@fig:token_count_browsecomp}{{a}{8}{BrowseComp}{figure.caption.13}{}}
+\newlabel{fig:token_count_browsecomp_zh}{{4b}{8}{BrowseComp-ZH}{figure.caption.13}{}}
+\newlabel{sub@fig:token_count_browsecomp_zh}{{b}{8}{BrowseComp-ZH}{figure.caption.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Token usage per turn on deep search tasks.}}{8}{figure.caption.13}\protected@file@percent }
+\newlabel{fig:token_count}{{4}{8}{Token usage per turn on deep search tasks}{figure.caption.13}{}}
+\@writefile{toc}{\contentsline {paragraph}{RL reshapes tool use strategy.}{8}{section*.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{RL synergistically boosts tool-use correctness and task success.}{8}{section*.18}\protected@file@percent }
+\@LN@col{2}
+\newlabel{fig:tool_statics_infbench}{{5a}{8}{$\infty $Bench}{figure.caption.16}{}}
+\newlabel{sub@fig:tool_statics_infbench}{{a}{8}{$\infty $Bench}{figure.caption.16}{}}
+\newlabel{fig:tool_statics_novelqa}{{5b}{8}{NovelQA}{figure.caption.16}{}}
+\newlabel{sub@fig:tool_statics_novelqa}{{b}{8}{NovelQA}{figure.caption.16}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Tool category breakdown during Qwen3-8B RL training on $\infty $Bench and NovelQA.}}{8}{figure.caption.16}\protected@file@percent }
+\newlabel{fig:tool_statics}{{5}{8}{Tool category breakdown during Qwen3-8B RL training on $\infty $Bench and NovelQA}{figure.caption.16}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Ablation results of tool design using Qwen3.5-397B-A17B. LME-S and BC+ denote LongMemEval-S and BrowseComp+, respectively.}}{8}{table.caption.19}\protected@file@percent }
+\newlabel{tab:tool_design_ablation}{{4}{8}{Ablation results of tool design using Qwen3.5-397B-A17B. LME-S and BC+ denote LongMemEval-S and BrowseComp+, respectively}{table.caption.19}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Ablation Studies}{8}{subsection.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Tool design.}{8}{section*.22}\protected@file@percent }
+\@LN@col{1}
+\newlabel{fig:tool_error_infbench}{{6a}{9}{$\infty $Bench}{figure.caption.17}{}}
+\newlabel{sub@fig:tool_error_infbench}{{a}{9}{$\infty $Bench}{figure.caption.17}{}}
+\newlabel{fig:tool_error_novelqa}{{6b}{9}{NovelQA}{figure.caption.17}{}}
+\newlabel{sub@fig:tool_error_novelqa}{{b}{9}{NovelQA}{figure.caption.17}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Tool invocation failure rates and task success rate on $\infty $Bench and NovelQA during RL training.}}{9}{figure.caption.17}\protected@file@percent }
+\newlabel{fig:tool_error}{{6}{9}{Tool invocation failure rates and task success rate on $\infty $Bench and NovelQA during RL training}{figure.caption.17}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Ablation results of the RL algorithm using Qwen3-8B. ``+ Entropy.'', ``+ Context.'', and ``+ Fine-grained.'' denote RL training with entropy-based partial rollout, context-aware partial rollout, and fine-grained credit assignment. Rows marked ``+'' cumulatively build on the preceding row; parentheses indicate the corresponding changes. }}{9}{table.caption.20}\protected@file@percent }
+\newlabel{tab:rl_training_ablation}{{5}{9}{Ablation results of the RL algorithm using Qwen3-8B. ``+ Entropy.'', ``+ Context.'', and ``+ Fine-grained.'' denote RL training with entropy-based partial rollout, context-aware partial rollout, and fine-grained credit assignment. Rows marked ``+'' cumulatively build on the preceding row; parentheses indicate the corresponding changes}{table.caption.20}{}}
+\@writefile{toc}{\contentsline {paragraph}{RL training design.}{9}{section*.23}\protected@file@percent }
+\@LN@col{2}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Ablation results of toolset design at the SFT and RL stages on Qwen3-8B.}}{9}{table.caption.21}\protected@file@percent }
+\newlabel{tab:trained_toolset_ablation}{{6}{9}{Ablation results of toolset design at the SFT and RL stages on Qwen3-8B}{table.caption.21}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{9}{section.6}\protected@file@percent }
+\bibdata{acl}
+\bibcite{bai2025longbench}{{1}{2025}{{Bai et~al.}}{{Bai, Tu, Zhang, Peng, Wang, Lv, Cao, Xu, Hou, Dong et~al.}}}
+\bibcite{chen2025browsecomp}{{2}{2025}{{Chen et~al.}}{{Chen, Ma, Zhuang, Nie, Zou, Liu, Green, Patel, Meng, Su et~al.}}}
+\bibcite{chhikara2025mem0}{{3}{2025}{{Chhikara et~al.}}{{Chhikara, Khant, Aryan, Singh, and Yadav}}}
+\bibcite{dong2025agentic}{{4}{2025}{{Dong et~al.}}{{Dong, Mao, Ma, Bao, Chen, Wang, Chen, Du, Wang, Zhang et~al.}}}
+\bibcite{du2025simvbg}{{5}{2025}{{Du et~al.}}{{Du, Ye, Wu, Jankowska, Zhu, Ai, Zhou, and Liu}}}
+\bibcite{du2026openseeker}{{6}{2026}{{Du et~al.}}{{Du, Ye, Tang, Zhu, Lu, Cai, and Chen}}}
+\bibcite{feng2025retool}{{7}{2025}{{Feng et~al.}}{{Feng, Huang, Qu, Zhang, Qin, Zhong, Jiang, Chi, and Zhong}}}
+\bibcite{gemma4}{{8}{2026}{{Google}}{{}}}
+\bibcite{kovcisky2018narrativeqa}{{9}{2018}{{Ko{\v {c}}isk{\`y} et~al.}}{{Ko{\v {c}}isk{\`y}, Schwarz, Blunsom, Dyer, Hermann, Melis, and Grefenstette}}}
+\bibcite{lee2024human}{{10}{2024}{{Lee et~al.}}{{Lee, Chen, Furuta, Canny, and Fischer}}}
+\bibcite{li2026salt}{{11}{2026}{{Li et~al.}}{{Li, Wang, Yan, Tian, Xu, Song, Xu, and Cheong}}}
+\bibcite{li2025websailor}{{12}{2025{a}}{{Li et~al.}}{{Li, Zhang, Yin, Zhang, Ou, Wu, Yin, Li, Tao, Wang, Shen, Zhang, Zhang, Wu, Jiang, Yan, Xie, Huang, and Zhou}}}
+\bibcite{li2025sculptor}{{13}{2025{b}}{{Li et~al.}}{{Li, Xu, Tan, Ma, Cao, and Liu}}}
+\bibcite{liu2025webexplorer}{{14}{2025}{{Liu et~al.}}{{Liu, Li, Zhang, Li, Chen, Ji, Cheng, Wu, Du, Xu, Song, Zhu, Chen, Zhao, and He}}}
+\bibcite{liu2026plan}{{15}{2026{a}}{{Liu et~al.}}{{Liu, Dehghan, Ganhotra, Hirzel, and Jabbarvand}}}
+\bibcite{liu2026pensieve}{{16}{2026{b}}{{Liu et~al.}}{{Liu, Liang, Ma, Zhou, Mi, He, and Wang}}}
+\bibcite{lu2023memochat}{{17}{2023}{{Lu et~al.}}{{Lu, An, Lin, Pergola, He, Yin, Sun, and Wu}}}
+\bibcite{lu2025scaling}{{18}{2025}{{Lu et~al.}}{{Lu, Sun, Du, Ling, Yao, Liu, and Chen}}}
+\bibcite{lu2026structured}{{19}{2026}{{Lu et~al.}}{{Lu, Li, Shi, Wang, Wang, and Hu}}}
+\bibcite{mialon2024gaia}{{20}{2024}{{Mialon et~al.}}{{Mialon, Fourrier, Wolf, LeCun, and Scialom}}}
+\@LN@col{1}
+\@LN@col{2}
+\bibcite{openai2025gptoss120bgptoss20bmodel}{{21}{2025}{{OpenAI}}{{}}}
+\bibcite{packer2023memgpt}{{22}{2024}{{Packer et~al.}}{{Packer, Fang, Patil, Lin, Wooders, and Gonzalez}}}
+\bibcite{pan2025secom}{{23}{2025}{{Pan et~al.}}{{Pan, Wu, Jiang, Luo, Cheng, Li, Yang, Lin, Zhao, Qiu et~al.}}}
+\bibcite{pan2024llmlingua}{{24}{2024}{{Pan et~al.}}{{Pan, Wu, Jiang, Xia, Luo, Zhang, Lin, R{\"u}hle, Yang, Lin et~al.}}}
+\bibcite{shao2025foldact}{{25}{2025}{{Shao et~al.}}{{Shao, Miao, Zhang, and Luo}}}
+\bibcite{shao2024deepseekmath}{{26}{2024}{{Shao et~al.}}{{Shao, Wang, Zhu, Xu, Song, Bi, Zhang, Zhang, Li, Wu et~al.}}}
+\bibcite{sheng2025hybridflow}{{27}{2025}{{Sheng et~al.}}{{Sheng, Zhang, Ye, Wu, Zhang, Zhang, Peng, Lin, and Wu}}}
+\bibcite{su2026u}{{28}{2026}{{Su et~al.}}{{Su, Fang, Li, Wang, Cai, Xie, Zhang, and Yuan}}}
+\bibcite{qwen35blog}{{29}{2026}{{Team}}{{}}}
+\bibcite{team2025tongyi}{{30}{2025}{{Team et~al.}}{{Team, Li, Zhang, Zhang, Huang, Li, Chen, Yin, Wu, Zhou et~al.}}}
+\bibcite{wangnovelqa}{{31}{2025}{{Wang et~al.}}{{Wang, Ning, Pan, Wu, Guo, Deng, Bao, Hu, Zhang, Wang et~al.}}}
+\bibcite{bc_en}{{32}{2025}{{Wei et~al.}}{{Wei, Sun, Papay, McKinney, Han, Fulford, Chung, Passos, Fedus, and Glaese}}}
+\bibcite{wu2025longmemeval}{{33}{2025{a}}{{Wu et~al.}}{{Wu, Wang, Yu, Zhang, Chang, and Yu}}}
+\bibcite{wu2025resum}{{34}{2025{b}}{{Wu et~al.}}{{Wu, Li, Zhao, Zhang, Ou, Yin, Zhang, Jiang, Xie, Huang, Cheng, Wang, Cheng, and Zhou}}}
+\bibcite{xbench}{{35}{2025}{{Xbench-Team}}{{}}}
+\bibcite{xu2026mem}{{36}{2026}{{Xu et~al.}}{{Xu, Liang, Mei, Gao, Tan, and Zhang}}}
+\bibcite{yang2025qwen3}{{37}{2025}{{Yang et~al.}}{{Yang, Li, Yang, Zhang, Hui, Zheng, Yu, Gao, Huang, Lv et~al.}}}
+\bibcite{yao2023react}{{38}{2023}{{Yao et~al.}}{{Yao, Zhao, Yu, Du, Shafran, Narasimhan, and Cao}}}
+\bibcite{ye2025agentfold}{{39}{2025}{{Ye et~al.}}{{Ye, Zhang, Li, Yin, Tao, Zhao, Su, Zhang, Qiao, Wang et~al.}}}
+\bibcite{yu2025memagent}{{40}{2025}{{Yu et~al.}}{{Yu, Chen, Feng, Chen, Dai, Yu, Zhang, Ma, Liu, Wang, and Zhou}}}
+\bibcite{yu2026agentic}{{41}{2026}{{Yu et~al.}}{{Yu, Yao, Xie, Tan, Feng, Li, and Wu}}}
+\bibcite{zhang2024infty}{{42}{2024}{{Zhang et~al.}}{{Zhang, Chen, Hu, Xu, Chen, Hao, Han, Thai, Wang, Liu et~al.}}}
+\@LN@col{1}
+\@LN@col{2}
+\bibcite{zhang2025memory}{{43}{2025}{{Zhang et~al.}}{{Zhang, Shu, Ma, Lin, Wu, and Sang}}}
+\bibcite{bc_zh}{{44}{2025}{{Zhou et~al.}}{{Zhou, Leon, Ying, Zhang, Shao, Ye, Chong, Jin, Xie, Cao et~al.}}}
+\citation{du2026openseeker}
+\@LN@col{1}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Theoretical Discussion of Fine-Grained Credit Assignment}{12}{appendix.A}\protected@file@percent }
+\newlabel{apx:theory}{{A}{12}{Theoretical Discussion of Fine-Grained Credit Assignment}{appendix.A}{}}
+\newlabel{eq:target_credit}{{10}{12}{Theoretical Discussion of Fine-Grained Credit Assignment}{equation.A.10}{}}
+\newlabel{eq:credit_estimators}{{11}{12}{Theoretical Discussion of Fine-Grained Credit Assignment}{equation.A.11}{}}
+\@writefile{toc}{\contentsline {paragraph}{Claim.}{12}{section*.26}\protected@file@percent }
+\newlabel{eq:conditional_variance}{{12}{12}{Claim}{equation.A.12}{}}
+\newlabel{eq:unbiasedness}{{13}{12}{Claim}{equation.A.13}{}}
+\@LN@col{2}
+\newlabel{eq:variance_reduction}{{14}{12}{Claim}{equation.A.14}{}}
+\citation{qwen35blog}
+\citation{openai2025gptoss120bgptoss20bmodel}
+\citation{sheng2025hybridflow}
+\citation{wu2025resum}
+\citation{openai2025gptoss120bgptoss20bmodel}
+\citation{liu2026pensieve}
+\@LN@col{1}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Training Dataset Statistics}{13}{appendix.B}\protected@file@percent }
+\newlabel{apx:training_data_stats}{{B}{13}{Training Dataset Statistics}{appendix.B}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {C}SFT Data Synthesis Details}{13}{appendix.C}\protected@file@percent }
+\newlabel{apx:sft_data_synthesis}{{C}{13}{SFT Data Synthesis Details}{appendix.C}{}}
+\@LN@col{2}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Statistics of the training data used in \textbf  {\textit  {ContextPilot}}{}, where NovelQA, NarrativeQA, and LongBench-v2 are used for long-context QA and OpenSeeker-v1 is used for deep search.}}{13}{table.caption.27}\protected@file@percent }
+\newlabel{tab:training_data_stats}{{7}{13}{Statistics of the training data used in \sysname {}, where NovelQA, NarrativeQA, and LongBench-v2 are used for long-context QA and OpenSeeker-v1 is used for deep search}{table.caption.27}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {D}Training Details}{13}{appendix.D}\protected@file@percent }
+\newlabel{apx:train_details}{{D}{13}{Training Details}{appendix.D}{}}
+\citation{liu2026pensieve}
+\citation{liu2026pensieve}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces System prompt used by \textbf  {\textit  {ContextPilot}}{} for long-context document QA.}}{14}{figure.caption.28}\protected@file@percent }
+\newlabel{fig:system_prompt}{{7}{14}{System prompt used by \sysname {} for long-context document QA}{figure.caption.28}{}}
+\@LN@col{1}
+\@LN@col{2}
+\@writefile{toc}{\contentsline {section}{\numberline {E}Additional Token Efficiency Analysis}{14}{appendix.E}\protected@file@percent }
+\newlabel{apx:token_efficiency}{{E}{14}{Additional Token Efficiency Analysis}{appendix.E}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces System prompt used by \textbf  {\textit  {ContextPilot}}{} for deep search tasks.}}{15}{figure.caption.29}\protected@file@percent }
+\newlabel{fig:deep_search_system_prompt}{{8}{15}{System prompt used by \sysname {} for deep search tasks}{figure.caption.29}{}}
+\@LN@col{1}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Prompt template used by the LLM-as-a-Judge for evaluating open-ended question-answering, following StateLM~\citep  {liu2026pensieve}.}}{15}{figure.caption.30}\protected@file@percent }
+\newlabel{fig:llm_judge_prompt}{{9}{15}{Prompt template used by the LLM-as-a-Judge for evaluating open-ended question-answering, following StateLM~\cite {liu2026pensieve}}{figure.caption.30}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {F}Tool Call Statistics}{15}{appendix.F}\protected@file@percent }
+\newlabel{apx:tool_call_stats}{{F}{15}{Tool Call Statistics}{appendix.F}{}}
+\@LN@col{2}
+\@writefile{toc}{\contentsline {section}{\numberline {G}Tool Failure Definitions}{15}{appendix.G}\protected@file@percent }
+\newlabel{apx:tool_failure_definitions}{{G}{15}{Tool Failure Definitions}{appendix.G}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Tool execution failure reason analysis.}}{16}{table.caption.31}\protected@file@percent }
+\newlabel{tab:tool_failure_definitions}{{8}{16}{Tool execution failure reason analysis}{table.caption.31}{}}
+\@LN@col{1}
+\@writefile{toc}{\contentsline {section}{\numberline {H}Additional Toolset Ablation}{16}{appendix.H}\protected@file@percent }
+\newlabel{apx:trained_toolset_ablation}{{H}{16}{Additional Toolset Ablation}{appendix.H}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Training-Free Toolset Transfer}{16}{appendix.I}\protected@file@percent }
+\newlabel{apx:training_free_toolset_transfer}{{I}{16}{Training-Free Toolset Transfer}{appendix.I}{}}
+\@LN@col{2}
+\@writefile{toc}{\contentsline {section}{\numberline {J}General Tool-Use Robustness}{16}{appendix.J}\protected@file@percent }
+\newlabel{apx:general_tool_robustness}{{J}{16}{General Tool-Use Robustness}{appendix.J}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces General tool-use evaluation results on ACEBench and $\tau ^2$-Bench.}}{16}{table.caption.33}\protected@file@percent }
+\newlabel{tab:general_tool_robustness}{{10}{16}{General tool-use evaluation results on ACEBench and $\tau ^2$-Bench}{table.caption.33}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {K}Additional RL Training Ablation}{16}{appendix.K}\protected@file@percent }
+\newlabel{apx:rl_training_ablation}{{K}{16}{Additional RL Training Ablation}{appendix.K}{}}
+\citation{wu2025resum}
+\citation{lu2025scaling}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Evaluation of the original and \textbf  {\textit  {ContextPilot}}{} toolsets on strong backbones without task-specific fine-tuning.}}{17}{table.caption.32}\protected@file@percent }
+\newlabel{tab:prompt_only_toolset_transfer}{{9}{17}{Evaluation of the original and \sysname {} toolsets on strong backbones without task-specific fine-tuning}{table.caption.32}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Additional ablation results of the RL algorithm using Qwen3-8B. All selection variants use the same snapshot budget and independently build on GRPO. Context \& Entropy partial rollout combines context variation and generation-entropy variation. Fine-grained credit is added on top of this joint strategy.}}{17}{table.caption.34}\protected@file@percent }
+\newlabel{tab:partial_rollout_ablation_full}{{11}{17}{Additional ablation results of the RL algorithm using Qwen3-8B. All selection variants use the same snapshot budget and independently build on GRPO. Context \& Entropy partial rollout combines context variation and generation-entropy variation. Fine-grained credit is added on top of this joint strategy}{table.caption.34}{}}
+\@LN@col{1}
+\@writefile{toc}{\contentsline {section}{\numberline {L}Sensitivity Analysis of Partial Rollout}{17}{appendix.L}\protected@file@percent }
+\newlabel{apx:sensitivity_analysis}{{L}{17}{Sensitivity Analysis of Partial Rollout}{appendix.L}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {M}Baseline Reproduction Details}{17}{appendix.M}\protected@file@percent }
+\newlabel{apx:baseline_details}{{M}{17}{Baseline Reproduction Details}{appendix.M}{}}
+\@writefile{toc}{\contentsline {paragraph}{ReSum}{17}{section*.37}\protected@file@percent }
+\@LN@col{2}
+\@writefile{toc}{\contentsline {paragraph}{SUPO}{17}{section*.38}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces Additional ablation results of the RL algorithm for Qwen3-8B and Gemma4-E4B-it. Rows marked ``+'' cumulatively build on the preceding row; parentheses indicate the corresponding changes.}}{18}{table.caption.35}\protected@file@percent }
+\newlabel{tab:rl_training_ablation_gemma}{{12}{18}{Additional ablation results of the RL algorithm for Qwen3-8B and Gemma4-E4B-it. Rows marked ``+'' cumulatively build on the preceding row; parentheses indicate the corresponding changes}{table.caption.35}{}}
+\newlabel{fig:sensitivity_alpha_qwen3_novelqa}{{10a}{18}{Qwen3-8B on NovelQA}{figure.caption.36}{}}
+\newlabel{sub@fig:sensitivity_alpha_qwen3_novelqa}{{a}{18}{Qwen3-8B on NovelQA}{figure.caption.36}{}}
+\newlabel{fig:sensitivity_alpha_qwen3_infbench}{{10b}{18}{Qwen3-8B on $\infty $Bench}{figure.caption.36}{}}
+\newlabel{sub@fig:sensitivity_alpha_qwen3_infbench}{{b}{18}{Qwen3-8B on $\infty $Bench}{figure.caption.36}{}}
+\newlabel{fig:sensitivity_alpha_gemma_novelqa}{{10c}{18}{Gemma4-E4B-it on NovelQA}{figure.caption.36}{}}
+\newlabel{sub@fig:sensitivity_alpha_gemma_novelqa}{{c}{18}{Gemma4-E4B-it on NovelQA}{figure.caption.36}{}}
+\newlabel{fig:sensitivity_alpha_gemma_infbench}{{10d}{18}{Gemma4-E4B-it on $\infty $Bench}{figure.caption.36}{}}
+\newlabel{sub@fig:sensitivity_alpha_gemma_infbench}{{d}{18}{Gemma4-E4B-it on $\infty $Bench}{figure.caption.36}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Sensitivity analysis of $\alpha $ in the context-aware partial rollout score with $\beta =1$.}}{18}{figure.caption.36}\protected@file@percent }
+\newlabel{fig:sensitivity_alpha}{{10}{18}{Sensitivity analysis of $\alpha $ in the context-aware partial rollout score with $\beta =1$}{figure.caption.36}{}}
+\@LN@col{1}
+\@writefile{toc}{\contentsline {section}{\numberline {N}Use of Scientific Artifacts}{18}{appendix.N}\protected@file@percent }
+\newlabel{apx:scientific_artifacts}{{N}{18}{Use of Scientific Artifacts}{appendix.N}{}}
+\@LN@col{2}
+\@LN@col{1}
+\@writefile{toc}{\contentsline {section}{\numberline {O}Use of AI Assistants}{19}{appendix.O}\protected@file@percent }
+\newlabel{apx:ai_assistants}{{O}{19}{Use of AI Assistants}{appendix.O}{}}
+\@LN@col{2}
+\gdef \@abspage@last{19}

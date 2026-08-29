@@ -1,22 +1,24 @@
 """
 ContextPilot RL components for verl.
 
-This package contains additions to verl that implement (a subset of) the
+This package contains the trainer-facing additions to verl for the
 ContextPilot training scheme described in the paper.
 
-Stage 1 (currently implemented, no partial rollout):
-    * snapshot segmentation at all 8 context-editing (ce) tool calls
-      (4 offloading + 4 memory writing tools)
-    * R_pen: -0.5 penalty on the final trajectory reward when ANY tool call
-      failed during the trajectory
-    * token-level loss masking via existing snapshot mechanism in
-      ``statelm_agent_loop``
-    * each snapshot is treated as an independent training sample and gets a
-      group-relative GRPO advantage among the same query (default GRPO already
-      does this once snapshots are emitted; the ``contextpilot_grpo`` adv
-      estimator is registered as a forward-compatible alias so we can wire in
-      the partial-rollout / subtree-mean credit assignment in stage 2 without
-      touching the trainer wiring again).
+The current pipeline:
+    * segments trajectories into trainable snapshots at configured ContextPilot
+      boundaries and applies token-level loss masking in ``statelm_agent_loop``
+    * ranks context-management actions by sensitivity and performs partial
+      rollouts from the selected parent states under a query-level budget
+    * assigns each snapshot the mean terminal reward of its descendant
+      continuations before query-level sampling and advantage computation
+    * applies R_pen (-0.5) to terminal rewards when a tool call fails or the
+      trajectory exceeds its context/turn budget
+    * computes group-relative GRPO advantages across snapshots that share the
+      same query uid via the ``contextpilot_grpo`` estimator
+
+Partial rollout and subtree-reward assignment are implemented by the agent-loop
+worker.  The advantage estimator in this package consumes those pre-assigned
+snapshot rewards and performs the final query-group normalisation.
 
 The whole stack is gated by the config flag
 ``actor_rollout_ref.rollout.multi_turn.contextpilot.enable``; when this flag

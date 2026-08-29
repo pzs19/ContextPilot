@@ -1,18 +1,13 @@
 """ContextPilot advantage estimator.
 
-Stage 1 implementation:
-    Without partial rollout, the "subtree" of every emitted snapshot is the
-    chain of snapshots that share the same trajectory.  In that case the
-    paper's bottom-up subtree-mean reduces to broadcasting the trajectory's
-    final reward to every snapshot, which is exactly what the existing
-    statelm agent loop already does (every snapshot inherits
-    ``final_trajectory_reward``).  The remaining piece is therefore the
-    GRPO group-relative normalisation across all snapshots that share the
-    same query (uid).
+Partial rollouts and subtree-mean reward assignment happen in the agent-loop
+worker before this estimator runs.  Consequently, each input row already
+represents one snapshot whose reward is the mean terminal reward of its
+descendant continuations.  This module performs the remaining GRPO
+group-relative normalisation across snapshots that share the same query uid.
 
-We register a dedicated ``contextpilot_grpo`` estimator (alias of GRPO with
-group-relative z-score normalisation) so we can wire in the partial-rollout
-subtree mean in stage 2 without changing the trainer plumbing.
+The dedicated ``contextpilot_grpo`` estimator keeps that trainer contract
+explicit while reusing vanilla GRPO's group-relative z-score normalisation.
 """
 
 from collections import defaultdict
@@ -37,12 +32,11 @@ def compute_contextpilot_grpo_advantage(
     """ContextPilot GRPO advantage.
 
     Behaviour: identical to vanilla GRPO group-relative z-score normalisation.
-    Each row of ``token_level_rewards`` already corresponds to a snapshot
-    (because :class:`StatelmToolAgentLoop` emits one row per snapshot and
-    every snapshot inherits the final trajectory reward, which equals the
-    subtree-mean in the no-partial-rollout regime).  Grouping by the query
-    uid therefore gives us the paper's group-relative advantage over all
-    snapshots produced for the same query.
+    Each row of ``token_level_rewards`` corresponds to a snapshot whose reward
+    has already been assigned by the agent-loop worker using the terminal
+    outcomes in that snapshot's subtree.  Grouping by query uid gives the
+    paper's group-relative advantage over all retained snapshots for the same
+    query.
     """
     norm_adv_by_std_in_grpo = True
     if config is not None:
